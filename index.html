@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>सीखो — Kids Learning</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#2E86AB">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;800&display=swap');
+
+  :root{
+    --sun: #FFB627;
+    --sky: #2E86AB;
+    --leaf: #4CA771;
+    --berry: #E85D75;
+    --cream: #FFF8EC;
+    --ink: #2B2B2B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height:100vh;
+  }
+  header{
+    background: var(--sky);
+    padding: 22px 16px 60px;
+    position: relative;
+    overflow:hidden;
+    text-align:center;
+  }
+  header::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-1px;
+    height:40px;
+    background: var(--cream);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  }
+  header h1{
+    font-family:'Baloo 2', cursive;
+    color: white;
+    font-size: 2rem;
+    margin: 0 0 4px;
+    letter-spacing: 0.5px;
+  }
+  header p{
+    color: #EAF6FF;
+    margin: 0;
+    font-weight:600;
+    font-size: 0.95rem;
+  }
+
+  .langbar{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin: -36px 12px 20px;
+    position:relative;
+    z-index:2;
+  }
+  .langbtn{
+    font-family:'Baloo 2', cursive;
+    font-size: 1rem;
+    padding: 12px 20px;
+    border-radius: 16px;
+    border: none;
+    cursor:pointer;
+    color:white;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+    transition: transform 0.12s ease;
+  }
+  .langbtn:active{ transform: translateY(3px); box-shadow:none; }
+  .langbtn.active{ outline: 3px solid var(--ink); }
+  .langbtn[data-lang="hi"]{ background: var(--berry); }
+  .langbtn[data-lang="en"]{ background: var(--leaf); }
+  .langbtn[data-lang="mr"]{ background: var(--sun); color:var(--ink); }
+  .langbtn[data-lang="bho"]{ background:#8E5FD9; }
+
+  main{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+  }
+
+  .section-label{
+    font-family:'Baloo 2', cursive;
+    font-size: 1.3rem;
+    margin: 18px 4px 12px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media(min-width:640px){
+    .grid{ grid-template-columns: 1fr 1fr; }
+  }
+
+  .card{
+    background:white;
+    border-radius: 20px;
+    overflow:hidden;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    border: 3px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .card:hover{ border-color: var(--sun); }
+  .card .frame-wrap{
+    position:relative;
+    padding-top: 56.25%;
+    background:#000;
+  }
+  .card iframe{
+    position:absolute; top:0; left:0; width:100%; height:100%; border:0;
+  }
+  .card .meta{
+    padding: 12px 14px 16px;
+  }
+  .card .meta .name{
+    font-family:'Baloo 2', cursive;
+    font-size: 1.05rem;
+    margin:0 0 2px;
+  }
+  .card .meta .tag{
+    font-size: 0.8rem;
+    color:#666;
+    font-weight:600;
+  }
+
+  footer{
+    text-align:center;
+    padding: 10px 16px 30px;
+    font-size: 0.8rem;
+    color:#888;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌈 सीखो — Mihir's Learning Corner</h1>
+  <p>Sirf rhymes, stories aur seekhne wali cheezein</p>
+</header>
+
+<div class="langbar">
+  <button class="langbtn active" data-lang="hi">हिंदी</button>
+  <button class="langbtn" data-lang="en">English</button>
+  <button class="langbtn" data-lang="mr">मराठी</button>
+  <button class="langbtn" data-lang="bho">भोजपुरी</button>
+</div>
+
+<main>
+  <div class="section-label" id="sectionTitle">🎈 हिंदी Rhymes &amp; Stories</div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  Curated channel list — is se bahar ki videos yahan nahi aayengi.
+</footer>
+
+<script>
+const CHANNELS = {
+  hi: [
+    { name: "Infobells — Hindi", tag: "Rhymes & Stories", playlist: "UU1ciY6kR3yj3kaKZ6R7ewAg" },
+    { name: "Kids TV India — Hindi Rhymes", tag: "Nursery Rhymes", playlist: "UUZbTuDplLcBb4bTHa_-5_UA" },
+    { name: "Kids Channel India", tag: "3D Rhymes & Songs", playlist: "UUR1hQY5sz5NEYofdv09XimA" },
+  ],
+  en: [
+    { name: "Jugnu Kids — English", tag: "Rhymes & ABC Learning", playlist: "UUsCe7SNQckiRJ6y563SIupg" },
+  ],
+  mr: [
+    { name: "Kids TV Marathi Balgeet", tag: "Marathi Rhymes", playlist: "UUdNx5awCbPgOeJTl_32CMag" },
+    { name: "Ultra Kids Marathi", tag: "Balgeet & Stories", playlist: "UUOdI35sw4Fs7xCq7moOnNeQ" },
+  ],
+  bho: [
+    { name: "Riya Rhymes Bhojpuri", tag: "Bhojpuri Rhymes", playlist: "UUFzvlZIWjzul0jcMij0i3FQ" },
+  ]
+};
+
+const TITLES = {
+  hi: "🎈 हिंदी Rhymes & Stories",
+  en: "📚 English Rhymes & Learning",
+  mr: "🌻 मराठी बालगीत",
+  bho: "🎶 भोजपुरी गीत"
+};
+
+function render(lang){
+  document.getElementById('sectionTitle').textContent = TITLES[lang];
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  CHANNELS[lang].forEach(ch => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="frame-wrap">
+        <iframe src="https://www.youtube.com/embed/videoseries?list=${ch.playlist}"
+          title="${ch.name}" loading="lazy"
+          allow="accelerometer; encrypted-media; gyroscope"
+          allowfullscreen></iframe>
+      </div>
+      <div class="meta">
+        <p class="name">${ch.name}</p>
+        <p class="tag">${ch.tag}</p>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll('.langbtn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.langbtn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render(btn.dataset.lang);
+  });
+});
+
+render('hi');
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
